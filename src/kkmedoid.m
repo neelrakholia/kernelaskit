@@ -1,4 +1,4 @@
-%
+% Taken from: https://github.com/SCRFpublic/DGSA/blob/master/kmedoids.m
 % This function applies a (kernel) k-medoid algorithm (PMA) 
 % in the Feature Space defined by the kernel matrix K. 
  
