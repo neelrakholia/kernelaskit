@@ -2,8 +2,7 @@
 % distance metrics
 function main1
     clear globals; clc; clear all;  
-    addpath ../
-    addpath ../src
+    addpath('src/')
 
     % generate points, n = database points, m = query points
     n = 2^12;

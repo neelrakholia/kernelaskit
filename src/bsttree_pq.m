@@ -9,8 +9,8 @@ classdef bsttree_pq < handle
     end
     
     properties  (SetAccess = private)
-        left = bsttree.empty; % left subtree
-        right = bsttree.empty; % right subtree
+        left = bsttree_pq.empty; % left subtree
+        right = bsttree_pq.empty; % right subtree
     end
     
     methods
@@ -51,8 +51,8 @@ classdef bsttree_pq < handle
                 root.sep = data(:,medoids);
                 
                 % recursively call bstrree on left and right node
-                root.left = bsttree(lchild, msize, mdepth, kernelf, depth + 1);
-                root.right = bsttree(rchild, msize, mdepth, kernelf, depth + 1);
+                root.left = bsttree_pq(lchild, msize, mdepth, kernelf, depth + 1);
+                root.right = bsttree_pq(rchild, msize, mdepth, kernelf, depth + 1);
             end % end if
         end % end function
         
