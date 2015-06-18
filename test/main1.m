@@ -61,8 +61,5 @@ function main1
     end
     % display accuracy value
     suml/(m*K)
-    
-    
-    
 
 end
