@@ -2,7 +2,7 @@
 % distance metrics
 function main2
     clear globals;clc; clear all;  
-    addpath('src/');
+    addpath('src/')
 
     % generate points, n = database points, m = query points
     n = 2^12;
@@ -21,7 +21,7 @@ function main2
 
     % example kernel
     sigma = 2;
-    kernelff = exp(-norm(x - y, 2)^2/(2*sigma^2));
+    kernelff = @(x,y) exp(-norm(x - y, 2)^2/(2*sigma^2));
     
     % tree options
     maxPointsPerNode = 2^7;
@@ -38,7 +38,7 @@ function main2
     tic
     for i = 1:m
         % iterate through the tree by sampling different points everytime
-        point = root1.sampsearch(q(:,i), kernelff, K, samp);
+        point = root.sampsearch(q(:,i), kernelff, K, samp);
         for j = 1:iter - 1
             point = horzcat(point, root.sampsearch(q(:,i), kernelff, K, samp));
         end
