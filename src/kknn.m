@@ -1,25 +1,23 @@
 % computes k-nearest neighbors for kernels
-% data is the are the data values
-% query is the (single) point whose neighbors are to be computed
-% kernelf is the kernel function
-% k is the number of nearest neighbors that have to be computed
-% n is the total number of points
+% data:    data values
+% query:   point whose neighbors are to be computed
+% kernelf: kernel function
+% k:       number of nearest neighbors that have to be computed
+% n:       total number of points
 function points = kknn(data, query, kernelf, k, n)
-%     if(n == k)
-%         points = data;
-%         return;
-%     end
+    % in the event that number of neighbors is greater than n
     if(k > n)
         points = horzcat(data, data(:,1:(k - n)));
         return;
     end
     
+    % linear search through all the points
     dist = zeros(n,1);
     for i = 1:n
-        dist(i) = kernelf(data(:,i), data(:,i)) + kernelf(query, query) ...
-            - 2*kernelf(data(:,i), query);
+        dist(i) = distk(data(:,i), query, kernelf);
     end
     
+    % sort distance and report k NN
     [m,ind] = sort(dist);
     points = data(:,ind(1:k));
     
