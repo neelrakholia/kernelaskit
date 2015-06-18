@@ -9,7 +9,7 @@ function [label, medoid] = kkmeans_m(points, kernelf, k, n)
 K = zeros(n, n);
 for i = 1:n
     for j = 1:n
-        K(i, j) = distk(points(:, i), points(:, j), kernelf);
+        K(i, j) = kernelf(points(:, i), points(:, j));
     end
 end
 

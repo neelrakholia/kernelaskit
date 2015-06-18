@@ -1,5 +1,4 @@
-        
-% computes the restricted distance metric for kernels
+% computes the distance for kernels
 % p1:      point1
 % p2:      point2
 % kernelf: kernel function used in calculating distanced
