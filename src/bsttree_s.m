@@ -112,8 +112,8 @@ classdef bsttree_s < handle
             
             % calculate the distance from the query point to the selected
             % data points
-            distl = distk(n1, qiery, kernelf);
-            distr = distk(n2, qiery, kernelf);
+            distl = distk(n1, query, kernelf);
+            distr = distk(n2, query, kernelf);
             
             % if point is sufficiently far from right
             if(distl < distr)
