@@ -19,36 +19,91 @@ classdef bsttree_s < handle
         % mdepth:  maximum depth of the tree
         % kernelf: kernel function used as the distance metric
         % depth:   intial depth of the tree
-        function root = bsttree_s(data, msize, mdepth, kernelf, depth)
-            % initialize the root
-            root.data = data;
-            sizep = size(data);
-            sizep = sizep(2);
-            root.nsize = sizep;
-            root.ndepth = depth;
+        function root = bsttree_s(data, msize, mdepth, kernelf, depth, ap)
+            if(nargin == 5)
+                % initialize the root
+                root.data = data;
+                sizep = size(data);
+                sizep = sizep(2);
+                root.nsize = sizep;
+                root.ndepth = depth;
+                
+                % check that nsize and ndepth are in acceptable range
+                if(root.nsize <= msize || root.ndepth >= mdepth)
+                    return;
+                    
+                % run kernel k-means
+                else
+                    % get classification
+                    labels = kkmeans_ap(data, kernelf, 2, root.nsize);
+                    
+                    % sort the data by labels
+                    [m,ind] = sort(labels);
+                    
+                    % assign points with label 1 to left node and label 2 to
+                    % right node
+                    num1 = sum(labels == 1);
+                    lchild = data(:,ind(1:num1));
+                    rchild = data(:, ind(num1 + 1:end));
+                    
+                    % recursively call bstrree on left and right node
+                    root.left = bsttree_s(lchild, msize, mdepth, ...
+                        kernelf, depth + 1);
+                    root.right = bsttree_s(rchild, msize, mdepth, ...
+                        kernelf, depth + 1);
+                end % end if
             
-            % check that nsize and ndepth are in acceptable range
-            if(root.nsize <= msize || root.ndepth >= mdepth)
-                return;
-                
-            % run kernel k-means
+            % construct naive tree
             else
-                % get classification
-                labels = kkmeans_ap(data, kernelf, 2, root.nsize);
+                % initialize the root
+                root.data = data;
+                sizep = size(data);
+                sizep = sizep(2);
+                root.nsize = sizep;
+                root.ndepth = depth;
                 
-                % sort the data by labels
-                [m,ind] = sort(labels);
-                
-                % assign points with label 1 to left node and label 2 to
-                % right node
-                num1 = sum(labels == 1);
-                lchild = data(:,ind(1:num1));
-                rchild = data(:, ind(num1 + 1:end));
-                
-                % recursively call bstrree on left and right node
-                root.left = bsttree_s(lchild, msize, mdepth, kernelf, depth + 1);
-                root.right = bsttree_s(rchild, msize, mdepth, kernelf, depth + 1);
-            end % end if     
+                % check that nsize and ndepth are in acceptable range
+                if(root.nsize <= msize || root.ndepth >= mdepth)
+                    return;
+                    
+                % run kernel k-means
+                else
+                    % get classification
+                    % randomly select 2 data points
+                    n = root.data(:, randperm(root.nsize));
+                    n1 = n(:,1);
+                    n2 = n(:,2);
+                    
+                    % get labels
+                    labels = zeros(root.nsize, 1);
+                    
+                    for i = 1:root.nsize
+                       distl = distk(n1, root.data(:,i), kernelf);
+                       distr = distk(n2, root.data(:,i), kernelf);
+                       
+                       if(distl < distr)
+                           labels(i) = 1;
+                       else
+                           labels(i) = 2;
+                       end
+                    end
+                    
+                    % sort the data by labels
+                    [m,ind] = sort(labels);
+                    
+                    % assign points with label 1 to left node and label 2 to
+                    % right node
+                    num1 = sum(labels == 1);
+                    lchild = data(:,ind(1:num1));
+                    rchild = data(:, ind(num1 + 1:end));
+                    
+                    % recursively call bstrree on left and right node
+                    root.left = bsttree_s(lchild, msize, mdepth, ...
+                        kernelf, depth + 1, ap);
+                    root.right = bsttree_s(rchild, msize, mdepth, ...
+                        kernelf, depth + 1, ap);
+                end % end if
+            end % end if else
         end % end function
         
     end % end method
