@@ -11,6 +11,7 @@ Priority Search K-Means Tree Algorithm (I used a slight variation of the algorit
 To run this algorithm we first need a tree, with each node containing data points belonging to a cluster as well as the centers for those clusters. Traditional kernel K-means would not work here because there is no way to determine the geometric center of a cluster in feature space (for instance, the RBF kernel has infinite dimesional feature space). To work around this problem, I used kernel K-medoids to get an approximation of the cluster center. Kernel K-medoids was then called recursively to get a binary search tree. 
 
 To search the tree for nearest neighbors of a query point, the node with the cluster center closest to the point is traversed first. This is recursively performed until a leaf is reached. The points in the leaf node are added to an array. The points in the node adjacent to the leaf node are then added to the array, and so on recrisively. The following code is the gist of the algorithm:
+
             % base case
             % if the root is a leaf            
             if(isempty(root.left))
