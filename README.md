@@ -86,3 +86,16 @@ Accuracy:                                  0.8234
 
 --Accuracy for Priority Search K-Means can be altered by changing the max parameter in main1.m. 
 --Accuracy for Random Sampling can be altered by changing the iter and samp parameter in main2.m. 
+
+UPDATE
+
+I implemented a 3rd algorithm. It involves "naive" construction of trees. What this essentially means is that I select two random points from a node and make them cluster centers. The points closest to a cluster center are assigned to that cluster. This obviously results in a highly unbalanced tree structure, but the construction is extremely fast. The search algorithm for this tree structure is the same as Random Sampling. 
+
+Executable: /test/main3.m
+
+Results
+
+Constructing tree:                         1.805226
+Search using Random Sampling:              43.837278
+Linear search:                             53.887611 
+Accuracy:                                  0.6455
