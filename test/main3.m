@@ -31,16 +31,16 @@ function main3
     points = zeros(m,K);
     
     tic
-    root = bsttree_s(r, maxPointsPerNode, maxLevel, kernelff, 0, 1);
+    root = bsttree_s(r, maxPointsPerNode, maxLevel, sigma, 0, 1);
     toc
     
     % search for neighbors for each query point  
     tic
     for i = 1:m
         % iterate through the tree by sampling different points everytime
-        point = root.sampsearch(q(:,i), kernelff, K, samp);
+        point = root.sampsearch(q(:,i), sigma, K, samp);
         for j = 1:iter - 1
-            point = horzcat(point, root.sampsearch(q(:,i), kernelff, K, samp));
+            point = horzcat(point, root.sampsearch(q(:,i), sigma, K, samp));
         end
         
         % search for nearest neighbors among gathered points
@@ -48,7 +48,7 @@ function main3
         point = point.';
         len = size(point);
         len = len(2);
-        points(i,:) = sum(kknn(point, q(:,i), kernelff, K, len))';
+        points(i,:) = sum(kknn(point, q(:,i), sigma, K, len))';
     end
     toc
     
@@ -56,7 +56,7 @@ function main3
     actual_nn = zeros(m,K);
     tic
     for i = 1:m
-        actual_nn(i,:) = sum(kknn(r,q(:,i),kernelff,K,n))';
+        actual_nn(i,:) = sum(kknn(r,q(:,i),sigma,K,n))';
     end
     toc
     

@@ -1,17 +1,17 @@
-% Tests for a priority queue based nearest neighbor search for kernel
+% Tests for a priority queue based search using vp trees for kernel
 % distance metrics
-function main1
-    clear globals; clc; clear all;  
+function main4
+    clear globals;clc; clear all;  
     addpath('src/')
 
     % generate points, n = database points, m = query points
-    n = 2^12;
+    n = 2^14;
     m = 400;
     dim = 8;
     
-    % number of nearest neighbors and maximum number of points to scan
+    % number of nearest neighbors, iterations, and samples to be taken
     K = 10;
-    max = floor(0.6*n);
+    max = floor(0.5*n);
     
     % random generation of database and query points
     point_distribution = 'gaussian';
@@ -19,21 +19,20 @@ function main1
     q = generate_points(dim, m, point_distribution);
 
     % example kernel
-    sigma = 2;
-    kernelff = @(x, y) exp(-norm(x - y, 2)^2/(2*sigma^2));
+    sigma = 0.2;
     
     % tree options
     maxPointsPerNode = 2^7;
-    maxLevel        =  10;
+    maxLevel        =  12;
     
     % construct tree and search for nearest neighbors
     points = zeros(m,K);
     
     tic
-    root = bsttree_pq(r, maxPointsPerNode, maxLevel, kernelff, 0);
+    root = bsttree_vp(r, maxPointsPerNode, maxLevel, sigma, 0);
     toc
     
-    % search for neighbors for each query point
+    % search for neighbors for each query point  
     tic
     for i = 1:m
         % perform a priority queue based search as described in FLANN
@@ -59,7 +58,6 @@ function main1
     for i = 1:m
         suml = suml + length(intersect(points(i,:), actual_nn(i,:)));
     end
-    % display accuracy value
     suml/(m*K)
 
 end
