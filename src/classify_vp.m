@@ -4,11 +4,17 @@
 % sigma:   bandwidth
 function [datal, datar, rad, cent] = classify_vp(data, nsize, sigma)
 % the number of random points to select
-rand = 20;
+rand = ceil(0.005*nsize);
+
+% select a random sample of data points to estimate variance
+randp = ceil(0.01*nsize);
 
 % select random points
 perm = randperm(nsize);
 index = perm(1:rand);
+
+rpoints = perm(1:randp);
+rpoints = data(:,rpoints);
 
 varm = 0;
 bestp = 0;
@@ -16,7 +22,7 @@ bestp = 0;
 % select best point
 for i = 1:rand
     cent = data(:, index(i));
-    dist = distk(data, cent, sigma);
+    dist = distk(rpoints, cent, sigma);
     
     % calculate variance
     varl = var(dist);
