@@ -53,11 +53,8 @@ function main3
     toc
     
     % actual nearest neighbors using linear search
-    actual_nn = zeros(m,K);
     tic
-    for i = 1:m
-        actual_nn(i,:) = sum(kknn(r,q(:,i),sigma,K,n))';
-    end
+    actual_nn = kknn(r,q,sigma,K,n);
     toc
     
     suml = 0;

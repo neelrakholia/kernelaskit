@@ -11,7 +11,7 @@ function main4
     
     % number of nearest neighbors, iterations, and samples to be taken
     K = 10;
-    max = floor(0.5*n);
+    max = floor(0.1*n);
     
     % random generation of database and query points
     point_distribution = 'gaussian';
@@ -19,7 +19,7 @@ function main4
     q = generate_points(dim, m, point_distribution);
 
     % example kernel
-    sigma = 0.2;
+    sigma = 2;
     
     % tree options
     maxPointsPerNode = 2^7;
@@ -46,11 +46,9 @@ function main4
     toc
     
     % actual nearest neighbors using linear search
-    actual_nn = zeros(m,K);
+    % actual_nn = zeros(m,K);
     tic
-    for i = 1:m
-        actual_nn(i,:) = sum(kknn(r,q(:,i),sigma,K,n))';
-    end
+    actual_nn = kknn(r,q,sigma,K,n);
     toc
     
     suml = 0;
