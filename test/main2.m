@@ -34,7 +34,8 @@ function main2
     root = bsttree_s(r, maxPointsPerNode, maxLevel, kernelff, 0);
     toc
     
-    % search for neighbors for each query point  
+    % search for neighbors for each query point
+    disteval = 0;
     tic
     for i = 1:m
         % iterate through the tree by sampling different points everytime
@@ -48,6 +49,7 @@ function main2
         point = point.';
         len = size(point);
         len = len(2);
+        disteval = disteval + len;
         points(i,:) = sum(kknn(point, q(:,i), sigma, K, len))';
     end
     toc
@@ -62,6 +64,11 @@ function main2
     for i = 1:m
         suml = suml + length(intersect(points(i,:), actual_nn(i,:)));
     end
-    suml/(m*K)
+    
+    % print accuracy
+    fprintf('Accuracy: %f\n', suml/(m*K))
+    
+    % display fraction of distance evaluations conducted
+    fprintf('Distance evaluations: %f\n', disteval/(m*n))
 
 end

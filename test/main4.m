@@ -56,6 +56,11 @@ function main4
     for i = 1:m
         suml = suml + length(intersect(points(i,:), actual_nn(i,:)));
     end
-    suml/(m*K)
+    
+    % print accuracy
+    fprintf('Accuracy: %f\n', suml/(m*K))
+    
+    % display fraction of distance evaluations conducted
+    fprintf('Distance evaluations: %f\n', (max*m)/(m*n))
 
 end
