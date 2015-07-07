@@ -89,7 +89,7 @@ Accuracy:                                  0.8234
 
 Note: To achieve > 0.9 accuracy, we need to use 80 percent of the points for Priority Search, and 35 iterations for Random Sampling
 
-UPDATE
+UPDATE 1
 
 I implemented a 3rd algorithm. It involves "naive" construction of trees. What this essentially means is that I select two random points from a node and make them cluster centers. The points closest to a cluster center are assigned to that cluster. This obviously results in a highly unbalanced tree structure, but the construction is extremely fast. The search algorithm for this tree structure is the same as Random Sampling. 
 
@@ -101,3 +101,51 @@ Constructing tree:                         1.805226
 Search using Random Sampling:              43.837278
 Linear search:                             53.887611 
 Accuracy:                                  0.6455
+
+UPDATE 2
+
+Optimized linear search for algorithms by removing for loops. Increased the speed by more than 100x. Also implemented an additional algorithm for tree construction (vp-trees). 
+
+Vantage Point Trees (vp-trees)
+A vantage-point tree, or VP tree is a BSP tree that segregates data in a metric space by choosing a position in the space (the "vantage point") and dividing the data points into two partitions: those that are nearer to the vantage point than a threshold, and those that are not. By repeatedly applying this procedure to partition the data into smaller and smaller sets, a tree data structure is created where neighbors in the tree are likely to be neighbors in the space. (Wikipedia) I used kernel distances for tree construction and a priority queue based search for traversing the tree. The algorithm for selecting the vantage points is described in the paper: "Data Structures and Algorithms for Nearest Neighbor Search in General Metric Spaces" by P. Yianilos. Essentially the data point that maximizes the variance in distance is selected.
+
+Files for Vantage Point Trees
+/src/bsttree_vp.m
+/src/distk.m
+/src/generate_points.m
+/src/classify_vp.m
+/src/kknn.m
+
+Executable
+/test/main4.m
+
+The updated numbers for all algorithms are presented below:
+
+Results
+
+Priority Search K-Means Tree
+Constructing tree:                         295.370181
+Search using Priority Search K-Means Tree: 0.531603
+Linear search:                             0.080025 
+Accuracy:                                  0.8818
+
+Random Sampling
+Constructing tree:                         72.079934
+Search using Random Sampling:              28.777789
+Linear search:                             0.080642
+Accuracy:                                  0.8153
+
+"Naive" Tree Construction and Search
+Constructing tree:                         1.875423
+Search using Random Sampling:              25.557008
+Linear search:                             0.070205
+Accuracy:                                  0.6253
+
+VP-Trees 
+Constructing tree:                         0.520415
+Search using Random Sampling:              1.048315
+Linear search:                             0.324681
+Accuracy:                                  0.9728
+(note these times are for 2^14 points, 4 times the number of points used for testing other algorithms)
+
+VP-Trees seem promising at this point because tree construction time, search time, and even accuracy is the best for them among all tested algorithms. 
