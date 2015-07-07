@@ -4,7 +4,7 @@
 % sigma:   bandwidth
 function [datal, datar, rad, cent] = classify_vp(data, nsize, sigma)
 % the number of random points to select
-rand = 100;
+rand = 20;
 
 % select random points
 perm = randperm(nsize);

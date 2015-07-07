@@ -11,7 +11,7 @@ function main4
     
     % number of nearest neighbors, iterations, and samples to be taken
     K = 10;
-    max = floor(0.1*n);
+    max = floor(0.6*n);
     
     % random generation of database and query points
     point_distribution = 'gaussian';
