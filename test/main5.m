@@ -11,7 +11,7 @@ function main5
     
     % number of nearest neighbors, and number of trees to generate
     K = 10;
-    ntree = 150;
+    ntree = 200;
     
     % random generation of database and query points
     point_distribution = 'gaussian';
