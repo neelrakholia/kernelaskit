@@ -46,7 +46,6 @@ function main4
     toc
     
     % actual nearest neighbors using linear search
-    % actual_nn = zeros(m,K);
     tic
     actual_nn = kknn(r,q,sigma,K,n);
     toc
