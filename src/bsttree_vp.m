@@ -104,6 +104,35 @@ classdef bsttree_vp < handle
                     root.left.data);
             end % end if
         end % end function
+        
+        % travereses to the node closest to the query point
+        % root:    the tree containing data
+        % query:   query point whose NN are to be searched
+        % sigma:   bandwidth for rbf kernel
+        function q = travtree2n(root, query, sigma)
+            % base case
+            % if the root is a leaf            
+            if(isempty(root.left))
+               q = root.data;
+               return;
+            end
+            
+            % get the radius and center
+            radius = root.rad;
+            center = root.cent;
+            
+            % calculate distance between query point and center
+            dist = distk(query, center, sigma);
+            
+            % recursive call to whichever center is closer 
+            if(dist < radius)
+                % store data according to distance from query point
+                q = travtree2n(root.left, query, sigma);
+            else
+                % store data according to distance from query point
+                q = travtree2n(root.right, query, sigma);
+            end % end if
+        end % end function
 
     end % end methods
   
