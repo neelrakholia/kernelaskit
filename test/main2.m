@@ -11,7 +11,7 @@ function main2
     
     % number of nearest neighbors, iterations, and samples to be taken
     K = 10;
-    iter = 15;
+    iter = 25;
     samp = 2^3;
     
     % random generation of database and query points
