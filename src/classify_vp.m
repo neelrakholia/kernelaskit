@@ -2,12 +2,12 @@
 % data:    data values
 % nsize:   number of entries
 % sigma:   bandwidth
-function [datal, datar, rad, cent] = classify_vp(data, nsize, sigma)
+function [datal, datar, indl, indr, rad, cent] = classify_vp(data, indi, nsize, sigma)
 % the number of random points to select
 rand = ceil(0.005*nsize);
 
 % select a random sample of data points to estimate variance
-randp = ceil(0.01*nsize);
+randp = ceil(0.005*nsize);
 
 % select random points
 perm = randperm(nsize);
@@ -42,7 +42,9 @@ mid = floor(nsize/2);
 % sort distance and find the elements in each node
 [m,ind] = sort(dist);
 datal = data(:,ind(1:mid));
+indl = indi(ind(1:mid));
 datar = data(:,ind(mid+1:end));
+indr = indi(ind(mid+1:end));
 
 % compute radius
 rad = distk(bestp, data(:, mid), sigma);
