@@ -11,7 +11,7 @@ function main4
     
     % number of nearest neighbors, iterations, and samples to be taken
     K = 10;
-    max = floor(0.6*n);
+    max = floor(0.3*n);
     
     % random generation of database and query points
     point_distribution = 'gaussian';
@@ -19,7 +19,7 @@ function main4
     q = generate_points(dim, m, point_distribution);
 
     % example kernel
-    sigma = 2;
+    sigma = 0.5;
     
     % tree options
     maxPointsPerNode = 2^7;
@@ -29,7 +29,7 @@ function main4
     points = zeros(m,K);
     
     tic
-    root = bsttree_vp(r, maxPointsPerNode, maxLevel, sigma, 0);
+    root = bsttree_vp(r, 1:n, maxPointsPerNode, maxLevel, sigma, 0);
     toc
     
     % search for neighbors for each query point  
@@ -41,14 +41,16 @@ function main4
         % search for nearest neighbors among those points
         len = size(point);
         len = len(2);
-        points(i,:) = sum(kknn(point, q(:,i), sigma, K, len))';
+        points(i,:) = kknn(r, point, q(:,i), sigma, K, len);
     end
     toc
     
     % actual nearest neighbors using linear search
     tic
-    actual_nn = kknn(r,q,sigma,K,n);
+    actual_nn = kknn(r,1:n,q,sigma,K,n);
     toc
+    
+    distk(q(:,1),r(:,actual_nn(1,:)), sigma)
     
     suml = 0;
     % calculate accuracy by comparing neighbors found
