@@ -19,7 +19,7 @@ r = generate_points(dim, n, point_distribution);
 q = generate_points(dim, m, point_distribution);
 
 % example kernel
-sigma = 0.8;
+sigma = 2;
 
 % tree options
 maxPointsPerNode = 2^7;

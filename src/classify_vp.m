@@ -7,7 +7,7 @@ function [datal, datar, indl, indr, rad, cent] = classify_vp(data, indi, nsize, 
 rand = ceil(0.005*nsize);
 
 % select a random sample of data points to estimate variance
-randp = ceil(0.005*nsize);
+randp = nsize;%ceil(0.01*nsize);
 
 % select random points
 perm = randperm(nsize);
