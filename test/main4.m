@@ -6,12 +6,12 @@ function main4
 
     % generate points, n = database points, m = query points
     n = 2^14;
-    m = 400;
+    m = 4;
     dim = 8;
     
     % number of nearest neighbors, iterations, and samples to be taken
     K = 10;
-    max = floor(0.3*n);
+    max = floor(0.6*n);
     
     % random generation of database and query points
     point_distribution = 'gaussian';
@@ -19,7 +19,7 @@ function main4
     q = generate_points(dim, m, point_distribution);
 
     % example kernel
-    sigma = 0.5;
+    sigma = 2;
     
     % tree options
     maxPointsPerNode = 2^7;
@@ -36,12 +36,12 @@ function main4
     tic
     for i = 1:m
         % perform a priority queue based search as described in FLANN
-        point = psearch(root, q(:,i), sigma, max);
+        point = psearch(root, r, q(:,i), sigma, K);
         
         % search for nearest neighbors among those points
-        len = size(point);
-        len = len(2);
-        points(i,:) = kknn(r, point, q(:,i), sigma, K, len);
+%         len = size(point);
+%         len = len(2);
+        points(i,:) = point; %kknn(r, point, q(:,i), sigma, K, len);
     end
     toc
     
@@ -49,8 +49,6 @@ function main4
     tic
     actual_nn = kknn(r,1:n,q,sigma,K,n);
     toc
-    
-    distk(q(:,1),r(:,actual_nn(1,:)), sigma)
     
     suml = 0;
     % calculate accuracy by comparing neighbors found
