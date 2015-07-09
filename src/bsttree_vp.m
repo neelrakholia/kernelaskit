@@ -26,8 +26,7 @@ classdef bsttree_vp < handle
         function root = bsttree_vp(data, indi, msize, mdepth, sigma, depth)
             % initialize the root
             root.data = data;
-            sizep = size(data);
-            sizep = sizep(2);
+            sizep = size(data, 2);
             root.nsize = sizep;
             root.ndepth = depth;
             root.ind = indi;
@@ -40,7 +39,7 @@ classdef bsttree_vp < handle
             else
                 % get classification and radius
                 [datal, datar, indl, indr, radi, cen] = classify_vp(data, ...
-                    indi, root.nsize, sigma); 
+                    indi, root.nsize, sigma);
                 
                 % assign vantage point
                 root.cent = cen;
@@ -66,26 +65,39 @@ classdef bsttree_vp < handle
         
         % Priority queue based search for NN. Described in FLANN.
         % root:    the tree containing data
+        % data:    all data points
         % query:   query point whose NN are to be searched
         % sigma:   bandwidth for rbf kernel
-        function points = psearch(root, query, sigma, max)           
-           % call another function to traverse the tree
-           r = travtree(root, query, sigma);
-           
-           % select first max number of points
-           points = r(:,1:max);        
+        % k:       number of nearest neighbors to be found
+        function points = psearch(root, data, query, sigma, k)
+            % initialize dk as infinity
+            dk = inf;
+            
+            % call another function to traverse the tree
+            [r,~] = travtree(root, data, query, sigma, k, dk);
+            
+            % select first max number of points
+            points = r;
         end
         
         % makes a priority queue based structure while traversing the tree
         % root:    the tree containing data
+        % data:    all data points
         % query:   query point whose NN are to be searched
         % sigma:   bandwidth for rbf kernel
-        function q = travtree(root, query, sigma)
+        % k:       number of nearest neighbor
+        % dk:      distance to furthest neighbor
+        function [q, dk] = travtree(root, data, query, sigma, k, dk)
             % base case
-            % if the root is a leaf            
+            % if the root is a leaf
             if(isempty(root.left))
-               q = root.ind;
-               return;
+                indi = root.ind;
+                q = kknn(data, indi, query, sigma, k, numel(indi));
+                dk_curr = distk(query, data(:,q(k)), sigma);
+                if(dk_curr < dk)
+                    dk = dk_curr;
+                end
+                return;
             end
             
             % get the radius and center
@@ -95,16 +107,40 @@ classdef bsttree_vp < handle
             % calculate distance between query point and center
             dist = distk(query, center, sigma);
             
-            % recursive call to whichever center is closer 
-            if(dist < radius)
+            l = 0;
+            r = 0;
+            
+            % recursive call to whichever center is closer
+            if(dist< radius)
                 % store data according to distance from query point
-                q = horzcat(travtree(root.left, query, sigma),...
-                    root.right.ind);
+                [q, dk] = travtree(root.left, data, query, sigma,...
+                    k, dk);
+                l = 1;
             else
                 % store data according to distance from query point
-                q = horzcat(travtree(root.right, query, sigma),...
-                    root.left.ind);
-            end % end if
+                [q, dk] = travtree(root.right, data, query, sigma,...
+                    k, dk);
+                r = 1;
+            end
+            
+            if((dist < radius + dk) && r == 1)
+                [q1, ~] = travtree(root.left, data, query, sigma,...
+                    k, dk);
+                q = kknn(data, [q,q1], query, sigma, k, numel([q,q1]));
+                dk_curr = distk(query, data(:,q(k)), sigma);
+                if(dk_curr < dk) 
+                    dk = dk_curr;
+                end 
+            end
+            if((dist < radius + dk) && l == 1)
+                [q1, ~] = travtree(root.right, data, query, sigma,...
+                    k, dk);
+                q = kknn(data, [q,q1], query, sigma, k, numel([q,q1]));
+                dk_curr = distk(query, data(:,q(k)), sigma);
+                if(dk_curr < dk) 
+                    dk = dk_curr;
+                end 
+            end
         end % end function
         
         % travereses to the node closest to the query point
@@ -113,10 +149,10 @@ classdef bsttree_vp < handle
         % sigma:   bandwidth for rbf kernel
         function q = travtree2n(root, query, sigma)
             % base case
-            % if the root is a leaf            
+            % if the root is a leaf
             if(isempty(root.left))
-               q = root.ind;
-               return;
+                q = root.ind;
+                return;
             end
             
             % get the radius and center
@@ -126,7 +162,7 @@ classdef bsttree_vp < handle
             % calculate distance between query point and center
             dist = distk(query, center, sigma);
             
-            % recursive call to whichever center is closer 
+            % recursive call to whichever center is closer
             if(dist < radius)
                 % store data according to distance from query point
                 q = travtree2n(root.left, query, sigma);
@@ -135,7 +171,7 @@ classdef bsttree_vp < handle
                 q = travtree2n(root.right, query, sigma);
             end % end if
         end % end function
-
+        
     end % end methods
-  
+    
 end % end class
