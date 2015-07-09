@@ -1,6 +1,6 @@
 % Tests for a node based search using vp trees for kernel
 % distance metrics
-function main5
+% function main5
 clear globals;clc; clear all;
 addpath('src/')
 
@@ -34,7 +34,10 @@ tic
 actual_nn = kknn(r,1:n,q,sigma,K,n);
 toc
 
-distk(q(:,1),r(:,actual_nn(1,:)), sigma)
+distk(q(:, 1), r(:, actual_nn(1, :)), sigma)
+
+% storing previous iteration 
+test_nn = ones(m, K);
 
 % search for neighbors for each query point
 tic
@@ -45,30 +48,26 @@ for k = 1:ntree
     for i = 1:m
         % perform tree search
         p = travtree2n(root, q(:,i), sigma);
-        len = size(p, 2);
-        disteval = disteval + len;
+        
+        % search for neighbors
+        search_inds = unique([p, test_nn(i,:)]);
+        new_nn = kknn(r, search_inds, q(:,i), sigma, K, numel(search_inds));
+        
+        % update disteval
+        disteval = disteval + numel(search_inds);
+        
+        % update array to store current iteration
+        test_nn(i,:) = new_nn;
         
         % store points
-        p = kknn(r, p, q(:,i), sigma, K, len);
-        point(i, (K*(k - 1) + 1):K*k) = p;
-        
-        po = unique(point(i,:).', 'rows');
-        po = po.';
-        po = po(:, 2:end);
-        len = size(po, 2);
-        
-        disteval = disteval + len;
-        
-        % search for nearest neighbors among those points
-        points(i,:) = kknn(r, po, ...
-            q(:,i), sigma, K, len);
-        
+        points(i,:) = test_nn(i,:);
     end
     
     
     suml = 0;
     % calculate accuracy by comparing neighbors found
     for i = 1:m
+%         intersect(points(i,:), actual_nn(i,:))
         suml = suml + length(intersect(points(i,:), actual_nn(i,:)));
     end
     
@@ -79,8 +78,3 @@ for k = 1:ntree
     fprintf('Distance evaluations: %f\n', disteval/(m*n))
 end
 toc
-
-
-
-
-end

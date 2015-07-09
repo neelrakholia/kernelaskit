@@ -4,7 +4,7 @@
 % sigma:   bandwidth
 function [datal, datar, indl, indr, rad, cent] = classify_vp(data, indi, nsize, sigma)
 % the number of random points to select
-rand = ceil(0.005*nsize);
+rand = 1; %ceil(0.005*nsize);
 
 % select a random sample of data points to estimate variance
 randp = nsize;%ceil(0.01*nsize);
