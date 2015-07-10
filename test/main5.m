@@ -6,12 +6,12 @@ addpath('src/')
 
 % generate points, n = database points, m = query points
 n = 2^14;
-m = 400;
+m = 40;
 dim = 8;
 
 % number of nearest neighbors, and number of trees to generate
-K = 10;
-ntree = 60;
+K = 1;
+ntree = 15;
 
 % random generation of database and query points
 point_distribution = 'gaussian';
@@ -34,9 +34,7 @@ tic
 actual_nn = kknn(r,1:n,q,sigma,K,n);
 toc
 
-distk(q(:, 1), r(:, actual_nn(1, :)), sigma)
-
-% storing previous iteration 
+% storing previous iteration
 test_nn = ones(m, K);
 
 % search for neighbors for each query point
@@ -66,10 +64,16 @@ for k = 1:ntree
     
     suml = 0;
     % calculate accuracy by comparing neighbors found
-    for i = 1:m
-%         intersect(points(i,:), actual_nn(i,:))
-        suml = suml + length(intersect(points(i,:), actual_nn(i,:)));
+    if(K == 1)
+        for i = 1:m
+            suml = suml + length(intersect(points(i), actual_nn(i)));
+        end
+    else
+        for i = 1:m
+            suml = suml + length(intersect(points(i,:), actual_nn(i,:)));
+        end
     end
+    
     
     % print accuracy
     fprintf('Accuracy: %f\n', suml/(m*K))

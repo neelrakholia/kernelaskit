@@ -6,12 +6,11 @@ function main4
 
     % generate points, n = database points, m = query points
     n = 2^14;
-    m = 4;
+    m = 40;
     dim = 8;
     
     % number of nearest neighbors, iterations, and samples to be taken
-    K = 10;
-    max = floor(0.6*n);
+    K = 1;
     
     % random generation of database and query points
     point_distribution = 'gaussian';
@@ -34,9 +33,11 @@ function main4
     
     % search for neighbors for each query point  
     tic
+    disteval = 0;
     for i = 1:m
         % perform a priority queue based search as described in FLANN
-        point = psearch(root, r, q(:,i), sigma, K);
+        [point,disev] = psearch(root, r, q(:,i), sigma, K);
+        disteval = disteval + disev;
         
         % search for nearest neighbors among those points
 %         len = size(point);
@@ -52,14 +53,22 @@ function main4
     
     suml = 0;
     % calculate accuracy by comparing neighbors found
-    for i = 1:m
-        suml = suml + length(intersect(points(i,:), actual_nn(i,:)));
+    if(K == 1)
+        for i = 1:m
+            suml = suml + length(intersect(points(i), actual_nn(i)));
+        end
+    else
+        for i = 1:m
+            suml = suml + length(intersect(points(i,:), actual_nn(i,:)));
+        end
     end
     
     % print accuracy
     fprintf('Accuracy: %f\n', suml/(m*K))
     
     % display fraction of distance evaluations conducted
-    fprintf('Distance evaluations: %f\n', (max*m)/(m*n))
+    fprintf('Distance evaluations: %f\n', disteval/(m*n))
+    
+    % find_leaf(actual_nn, root)
 
 end
