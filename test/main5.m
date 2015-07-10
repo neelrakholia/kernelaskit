@@ -10,7 +10,7 @@ m = 40;
 dim = 8;
 
 % number of nearest neighbors, and number of trees to generate
-K = 1;
+K = 2;
 ntree = 15;
 
 % random generation of database and query points
@@ -74,11 +74,22 @@ for k = 1:ntree
         end
     end
     
+    % calculate distance ratio
+    distr = zeros(m, 1);
+    for i = 1:m
+        dist_actual = distk(r(:,actual_nn(i,:)),q(:,i),sigma);
+        dist_app = distk(r(:,points(i,:)),q(:,i),sigma);
+        distr(i) = mean(dist_app ./ dist_actual); 
+    end
+    
     
     % print accuracy
-    fprintf('Accuracy: %f\n', suml/(m*K))
+    fprintf('Accuracy: %f\n', suml/(m*K));
     
     % display fraction of distance evaluations conducted
-    fprintf('Distance evaluations: %f\n', disteval/(m*n))
+    fprintf('Distance evaluations: %f\n', disteval/(m*n));
+    
+    % print ratio of distance
+    fprintf('Average ratio of distance: %f\n',mean(distr));
 end
 toc
