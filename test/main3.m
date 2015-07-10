@@ -21,7 +21,6 @@ function main3
 
     % example kernel
     sigma = 2;
-    kernelff = @(x,y) exp(-norm(x - y, 2)^2/(2*sigma^2));
     
     % tree options
     maxPointsPerNode = 2^7;
