@@ -69,12 +69,13 @@ classdef bsttree_vp < handle
         % query:   query point whose NN are to be searched
         % sigma:   bandwidth for rbf kernel
         % k:       number of nearest neighbors to be found
-        function points = psearch(root, data, query, sigma, k)
+        function [points,deval] = psearch(root, data, query, sigma, k)
             % initialize dk as infinity
             dk = inf;
+            deval = 0;
             
             % call another function to traverse the tree
-            [r,~] = travtree(root, data, query, sigma, k, dk);
+            [r,dk,deval] = travtree(root, data, query, sigma, k, dk, [], deval);
             
             % select first max number of points
             points = r;
@@ -87,17 +88,22 @@ classdef bsttree_vp < handle
         % sigma:   bandwidth for rbf kernel
         % k:       number of nearest neighbor
         % dk:      distance to furthest neighbor
-        function [q, dk] = travtree(root, data, query, sigma, k, dk)
+        % deval:   the number of distance evaluations
+        function [q, dk, deval] = travtree(root, data, query, sigma, k, dk, q_in, deval)
             % base case
             % if the root is a leaf
             if(isempty(root.left))
                 indi = root.ind;
-                q = kknn(data, indi, query, sigma, k, numel(indi));
+                q = kknn(data, [indi, q_in], query, sigma, k, ...
+                    numel(indi)+numel(q_in));
+                deval = deval + numel(indi)+numel(q_in);
                 dk_curr = distk(query, data(:,q(k)), sigma);
                 if(dk_curr < dk)
                     dk = dk_curr;
                 end
+                % fprintf('Base case candidate %d, dist: %g\n', q(k), dk_curr);
                 return;
+                
             end
             
             % get the radius and center
@@ -106,40 +112,38 @@ classdef bsttree_vp < handle
             
             % calculate distance between query point and center
             dist = distk(query, center, sigma);
-            
-            l = 0;
-            r = 0;
-            
-            % recursive call to whichever center is closer
-            if(dist< radius)
+
+            if(dist < radius)
                 % store data according to distance from query point
-                [q, dk] = travtree(root.left, data, query, sigma,...
-                    k, dk);
-                l = 1;
+                % fprintf('recursing left: dist %g, radius %g, dk: %g, level %d\n', ...
+                    %dist, radius, dk, root.ndepth);
+                
+                [q, dk, deval] = travtree(root.left, data, query, sigma,...
+                    k, dk, q_in, deval);
+                
+                if(dist + dk > radius)
+                    [q, dk, deval] = travtree(root.right, data, query, sigma,...
+                        k, dk,q, deval);
+                else
+                    % fprintf('pruning right: dist %g, radius %g, dk: %g, level %d\n', dist, radius, dk, root.ndepth);
+                end
+                
             else
+                
                 % store data according to distance from query point
-                [q, dk] = travtree(root.right, data, query, sigma,...
-                    k, dk);
-                r = 1;
-            end
-            
-            if((dist < radius + dk) && r == 1)
-                [q1, ~] = travtree(root.left, data, query, sigma,...
-                    k, dk);
-                q = kknn(data, [q,q1], query, sigma, k, numel([q,q1]));
-                dk_curr = distk(query, data(:,q(k)), sigma);
-                if(dk_curr < dk) 
-                    dk = dk_curr;
-                end 
-            end
-            if((dist < radius + dk) && l == 1)
-                [q1, ~] = travtree(root.right, data, query, sigma,...
-                    k, dk);
-                q = kknn(data, [q,q1], query, sigma, k, numel([q,q1]));
-                dk_curr = distk(query, data(:,q(k)), sigma);
-                if(dk_curr < dk) 
-                    dk = dk_curr;
-                end 
+                % fprintf('recursing right: dist %g, radius %g, dk: %g, level %d\n', dist, radius, dk, root.ndepth);
+
+                [q, dk, deval] = travtree(root.right, data, query, sigma,...
+                    k, dk, q_in, deval);
+                
+                if(dist < radius + dk)
+                    [q, dk, deval] = travtree(root.left, data, query, sigma,...
+                        k, dk, q, deval);
+                else
+                    %fprintf('pruning left: dist %g, radius %g, dk: %g, level %d\n', dist, radius, dk, root.ndepth);
+                end  
+                
+                
             end
         end % end function
         
@@ -171,6 +175,26 @@ classdef bsttree_vp < handle
                 q = travtree2n(root.right, query, sigma);
             end % end if
         end % end function
+        
+        function find_leaf(point_ind, node)
+           
+            if (isempty(node.left))
+                
+                fprintf('Point in leaf with radius %g\n', node.rad);
+                
+            elseif (~isempty(intersect(point_ind, node.left.ind)))
+            
+                fprintf('Point in left_child with radius %g at level %d\n', node.rad, node.ndepth);
+                find_leaf(point_ind, node.left);
+                
+            else
+                fprintf('Point in right_child with radius %g at level %d\n', node.rad, node.ndepth);
+                
+                find_leaf(point_ind, node.right);
+                
+            end
+            
+        end
         
     end % end methods
     

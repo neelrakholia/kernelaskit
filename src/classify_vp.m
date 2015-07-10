@@ -7,7 +7,8 @@ function [datal, datar, indl, indr, rad, cent] = classify_vp(data, indi, nsize, 
 rand = 1; %ceil(0.005*nsize);
 
 % select a random sample of data points to estimate variance
-randp = nsize;%ceil(0.01*nsize);
+randp = nsize;
+% randp = ceil(0.01*nsize);
 
 % select random points
 perm = randperm(nsize);
@@ -37,7 +38,7 @@ end
 dist = distk(data, bestp, sigma);
 
 % compute midpoint
-mid = floor(nsize/2);
+mid = ceil(nsize/2);
 
 % sort distance and find the elements in each node
 [m,ind] = sort(dist);
@@ -45,8 +46,13 @@ datal = data(:,ind(1:mid));
 indl = indi(ind(1:mid));
 datar = data(:,ind(mid+1:end));
 indr = indi(ind(mid+1:end));
+cent = bestp;
 
 % compute radius
-rad = distk(bestp, data(:, mid), sigma);
+rad = distk(bestp, datal(:, end), sigma);
+
+% if(rad == 0)
+%     fprintf('center: %d, mid: %d, rad: %g\n', index(1), indi(ind(mid)), rad);
+% end
     
 end

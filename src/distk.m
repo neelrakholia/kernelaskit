@@ -13,6 +13,8 @@ dotProd = X'*x;
 d = repmat(x2,N,1)+repmat(X2',1,n)-2*dotProd;
 
 % evaluate kernel
-d = 1.0 ./ exp(-d/(2*sigma^2));
+% evaluate kernel
+d = exp(-d/(2*sigma^2));
+d = sqrt(-2*d + 2);
 
 end
