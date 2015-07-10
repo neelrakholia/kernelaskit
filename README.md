@@ -149,3 +149,54 @@ Accuracy:                                  0.9728
 (note these times are for 2^14 points, 4 times the number of points used for testing other algorithms)
 
 VP-Trees seem promising at this point because tree construction time, search time, and even accuracy is the best for them among all tested algorithms. 
+
+UPDATE 3
+
+I discovered a couple of bugs in the file distk.m and classify_vp.m. These were first corrected. The way I calculated accuracy was also ineffecient and faulty. To overcome this, I implemented a global indexing scheme for the data points. With VP-trees giving the highest accuracy and fastest construction time, I decided to explore them further. In particular, I decided to try two seperate algoithms:
+
+1) Backtrack search: Searches through the tree until it finds the exact neighbor. Guarantees an accuracy of 1.
+2) Random Tree search: A number of VP-trees are constructed and for each query a greedy search is performed on each tree. The larger the number of trees used, the greater is the number of actual neighbors discovered. 
+
+To test how well Random Tree search performs, I also calculated the average of the ratio of distance between app. NN and actual NN. In addition to this, I also calculated what fraction of total distance calculations (performed by linear brute force search algorithm) are computed by both the aforementioned algorithms. The results are presented below:
+
+Files for Backtrack Search
+/src/bsttree_vp.m
+/src/distk.m
+/src/generate_points.m
+/src/classify_vp.m
+/src/kknn.m
+
+Executable
+/test/main4.m
+
+Files for Random Tree Search
+/src/bsttree_vp.m
+/src/distk.m
+/src/generate_points.m
+/src/classify_vp.m
+/src/kknn.m
+
+Executable
+/test/main5.m
+
+Results
+
+Backtrack Search
+Constructing tree:                         0.167403
+Search using backtrack search:             16.510435
+Linear search:                             0.362102 
+Accuracy:                                  1.0000
+Distance evaluations in tree:              0.002500
+Distance evaluations:                      1.064754
+Total distance evaluations:                1.067254
+
+Random tree search (20 trees)
+Constructing trees + search:               13.046991
+Linear search:                             0.362944
+Accuracy:                                  0.9403
+Distance evaluations in tree:              0.050000
+Distance evaluations:                      0.165302
+Total distance evaluations:                0.215302
+Average ratio of distance:                 1.004181
+
+As expected there is a trade-off between accuracy and number of distance evaluations. Backtrack search for high dimensions is inevitably slow because of the curse of dimensionality. Random tree search is faster but not completely accurate. As we study other data structures, the values listed above will be used as a standard for comparison. 
