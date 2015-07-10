@@ -1,7 +1,7 @@
-## kernelaskit
-## Author:     Neel Rakholia
-## Co-Austhor: Bill March
-## Institute:   ICES, UT Austin, Austin, Texas
+### kernelaskit
+### Author:     Neel Rakholia
+### Co-Author: Bill March
+### Institute:   ICES, UT Austin, Austin, Texas
 
 I implemented two tree based search algorithms for nearest neighbors in 
 arbitrary feature spaces (kernel distances).
