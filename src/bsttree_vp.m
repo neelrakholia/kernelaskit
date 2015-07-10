@@ -7,6 +7,7 @@ classdef bsttree_vp < handle
         cent % point chosen as vantage point
         nsize = 0 % number of elements in the node
         ndepth = 0 % depth of the node
+        dise = 0 % number of distance evaluations
         
     end
     
@@ -23,7 +24,8 @@ classdef bsttree_vp < handle
         % mdepth:  maximum depth of the tree
         % kernelf: rbf kernel bandwidth
         % depth:   intial depth of the tree
-        function root = bsttree_vp(data, indi, msize, mdepth, sigma, depth)
+        % diseval: number of distance evaluations
+        function root = bsttree_vp(data, indi, msize, mdepth, sigma, depth, diseval)
             % initialize the root
             root.data = data;
             sizep = size(data, 2);
@@ -38,8 +40,10 @@ classdef bsttree_vp < handle
                 % run kernel k-means and split the data
             else
                 % get classification and radius
-                [datal, datar, indl, indr, radi, cen] = classify_vp(data, ...
-                    indi, root.nsize, sigma);
+                [datal, datar, indl, indr, radi, cen, diseval] = classify_vp(data, ...
+                    indi, root.nsize, sigma, diseval);
+                
+                root.dise = diseval;
                 
                 % assign vantage point
                 root.cent = cen;
@@ -53,9 +57,9 @@ classdef bsttree_vp < handle
                 
                 % recursively call bstrree on left and right node
                 root.left = bsttree_vp(lchild, indl, msize, mdepth, ...
-                    sigma, depth + 1);
+                    sigma, depth + 1, diseval);
                 root.right = bsttree_vp(rchild, indr, msize, mdepth, ...
-                    sigma, depth + 1);
+                    sigma, depth + 1, diseval);
             end % end if
         end % end function
         

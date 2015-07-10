@@ -6,11 +6,11 @@ function main4
 
     % generate points, n = database points, m = query points
     n = 2^14;
-    m = 40;
+    m = 400;
     dim = 8;
     
     % number of nearest neighbors, iterations, and samples to be taken
-    K = 2;
+    K = 10;
     
     % random generation of database and query points
     point_distribution = 'gaussian';
@@ -28,7 +28,7 @@ function main4
     points = zeros(m,K);
     
     tic
-    root = bsttree_vp(r, 1:n, maxPointsPerNode, maxLevel, sigma, 0);
+    root = bsttree_vp(r, 1:n, maxPointsPerNode, maxLevel, sigma, 0, 0);
     toc
     
     % search for neighbors for each query point  
@@ -74,8 +74,16 @@ function main4
     % print accuracy
     fprintf('Accuracy: %f\n', suml/(m*K))
     
+    % display fraction of distance evaluations conducted while constructing
+    % tree
+    fprintf('Distance evaluations in tree: %f\n', root.dise/(m*n))
+    
     % display fraction of distance evaluations conducted
     fprintf('Distance evaluations: %f\n', disteval/(m*n))
+    
+    % display total number of distance evaluations:
+    fprintf('Total distance evaluations: %f\n', disteval/(m*n) + ...
+        root.dise/(m*n));
     
     % print ratio of distance
     fprintf('Average ratio of distance: %f\n',mean(distr));

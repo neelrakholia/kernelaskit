@@ -2,9 +2,13 @@
 % data:    data values
 % nsize:   number of entries
 % sigma:   bandwidth
-function [datal, datar, indl, indr, rad, cent] = classify_vp(data, indi, nsize, sigma)
+% diseval: number of distance evaluations
+function [datal, datar, indl, indr, rad, cent, diseval] = classify_vp(data, ...
+    indi, nsize, sigma, diseval)
 % the number of random points to select
 rand = 1; %ceil(0.005*nsize);
+
+diseval = diseval + rand*nsize;
 
 % select a random sample of data points to estimate variance
 randp = nsize;

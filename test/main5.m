@@ -6,12 +6,12 @@ addpath('src/')
 
 % generate points, n = database points, m = query points
 n = 2^14;
-m = 40;
+m = 400;
 dim = 8;
 
 % number of nearest neighbors, and number of trees to generate
-K = 2;
-ntree = 15;
+K = 10;
+ntree = 20;
 
 % random generation of database and query points
 point_distribution = 'gaussian';
@@ -40,9 +40,10 @@ test_nn = ones(m, K);
 % search for neighbors for each query point
 tic
 disteval = 0;
+treeeval = 0;
 for k = 1:ntree
     % construct tree
-    root = bsttree_vp(r, 1:n, maxPointsPerNode, maxLevel, sigma, 0);
+    root = bsttree_vp(r, 1:n, maxPointsPerNode, maxLevel, sigma, 0, 0);
     for i = 1:m
         % perform tree search
         p = travtree2n(root, q(:,i), sigma);
@@ -61,6 +62,7 @@ for k = 1:ntree
         points(i,:) = test_nn(i,:);
     end
     
+    treeeval = treeeval + root.dise;
     
     suml = 0;
     % calculate accuracy by comparing neighbors found
@@ -86,8 +88,16 @@ for k = 1:ntree
     % print accuracy
     fprintf('Accuracy: %f\n', suml/(m*K));
     
+    % display fraction of distance evaluations conducted while constructing
+    % the tree
+    fprintf('Distance evaluations in tree: %f\n', treeeval/(m*n));
+    
     % display fraction of distance evaluations conducted
     fprintf('Distance evaluations: %f\n', disteval/(m*n));
+    
+    % display total number of distance evaluations:
+    fprintf('Total distance evaluations: %f\n', disteval/(m*n) + ...
+        treeeval/(m*n));
     
     % print ratio of distance
     fprintf('Average ratio of distance: %f\n',mean(distr));
