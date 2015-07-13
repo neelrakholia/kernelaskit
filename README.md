@@ -286,3 +286,14 @@ evaluations. Backtrack search for high dimensions is inevitably slow because of
 the curse of dimensionality. Random tree search is faster but not completely 
 accurate. As we study other data structures, the values listed above will be 
 used as a standard for comparison. 
+
+
+UPDATE 4
+
+I decided to experiment a little with the parameters, and see how that affects 
+the performance of both the methods described in UPDATE 3. In particular, I
+changed the number of dimensions and the RBF kernel bandwidth, sigma. Everything
+else was kept constant. The results are presented below:
+
+http://bit.ly/1UUP5UA
+
