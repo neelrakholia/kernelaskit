@@ -41,7 +41,9 @@ test_nn = ones(m, K);
 tic
 disteval = 0;
 treeeval = 0;
-for k = 1:ntree
+k = 0;
+acc = 0;
+while(k <= ntree && acc ~= 1.0)
     % construct tree
     root = bsttree_vp(r, 1:n, maxPointsPerNode, maxLevel, sigma, 0, 0);
     for i = 1:m
@@ -86,6 +88,7 @@ for k = 1:ntree
     
     
     % print accuracy
+    acc = suml/(m*K);
     fprintf('Accuracy: %f\n', suml/(m*K));
     
     % display fraction of distance evaluations conducted while constructing
@@ -101,5 +104,7 @@ for k = 1:ntree
     
     % print ratio of distance
     fprintf('Average ratio of distance: %f\n',mean(distr));
+    
+    k = k + 1;
 end
 toc
