@@ -16,6 +16,12 @@ m = 6000;
 test = binread_array(filename, m*dim);
 test = reshape(test, dim, m);
 
+% sample data
+n = 2^16;
+m = 4000;
+train = datasample(train, n, 2, 'Replace', false);
+test = datasample(test, m, 2, 'Replace', false);
+
 % number of nearest neighbors, and number of trees to generate
 K = 10;
 ntree = 20;

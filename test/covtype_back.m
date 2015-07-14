@@ -5,16 +5,22 @@ addpath('..')
 
 % read train
 filename = 'covtype.libsvm.trn.X.bin';
-n = 2^16;
+n = 499999;
 dim = 54;
 train = binread_array(filename, n*dim);
 train = reshape(train, dim, n);
 
 % read test
 filename = 'covtype.libsvm.tst.X.bin';
-m = 6000;
+m = 80012;
 test = binread_array(filename, m*dim);
 test = reshape(test, dim, m);
+
+% sample data
+n = 2^14;
+m = 400;
+train = datasample(train, n, 2, 'Replace', false);
+test = datasample(test, m, 2, 'Replace', false);
 
 % number of nearest neighbors, and number of trees to generate
 K = 10;
