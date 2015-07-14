@@ -17,8 +17,8 @@ test = binread_array(filename, m*dim);
 test = reshape(test, dim, m);
 
 % sample data
-n = 2^15;
-m = 4000;
+n = 2^18;
+m = 1600;
 train = datasample(train, n, 2, 'Replace', false);
 test = datasample(test, m, 2, 'Replace', false);
 
@@ -30,12 +30,18 @@ ntree = 20;
 sigma = 0.22;
 
 % tree options
-maxPointsPerNode = 2^8;
+maxPointsPerNode = 2^10;
 maxLevel        =  12;
 
 % brute force search
 tic
-actual_nn = kknn(train,1:n,test,sigma,K,n);
+piece = 10;
+actual_nn = kknn(train,1:n,test(:,1:m/10),sigma,K,n);
+for i = 2:piece
+    actual_nn = vertcat(actual_nn, kknn(train,1:n,...
+        test(:,(i - 1)*(m/10) + 1:i*m/10),sigma,K,n));
+end
+
 toc
 
 % construct tree and search for nearest neighbors
