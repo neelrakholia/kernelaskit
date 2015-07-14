@@ -5,41 +5,35 @@ addpath('..')
 
 % read train
 filename = 'covtype.libsvm.trn.X.bin';
-n = 499999;
+n = 2^16;
 dim = 54;
 train = binread_array(filename, n*dim);
 train = reshape(train, dim, n);
 
 % read test
 filename = 'covtype.libsvm.tst.X.bin';
-m = 81012;
+m = 6000;
 test = binread_array(filename, m*dim);
 test = reshape(test, dim, m);
-
 
 % number of nearest neighbors, and number of trees to generate
 K = 10;
 ntree = 20;
 
 % example kernel
-sigma = 0.3;
+sigma = 0.22;
 
+% tree options
+maxPointsPerNode = 2^9;
+maxLevel        =  12;
+
+% brute force search
 tic
 actual_nn = kknn(train,1:n,test,sigma,K,n);
 toc
-
-% tree options
-maxPointsPerNode = 2^13;
-maxLevel        =  12;
 
 % construct tree and search for nearest neighbors
 points = zeros(m,K);
-point = zeros(m, K*ntree);
-
-% actual nearest neighbors using linear search
-tic
-actual_nn = kknn(train,1:n,test,sigma,K,n);
-toc
 
 % storing previous iteration
 test_nn = ones(m, K);
@@ -50,16 +44,17 @@ disteval = 0;
 treeeval = 0;
 k = 0;
 acc = 0;
-while(k <= ntree && acc ~= 1.0)
+while(k <= ntree && acc < 0.9)
     % construct tree
-    root = bsttree_vp(r, 1:n, maxPointsPerNode, maxLevel, sigma, 0, 0);
+    root = bsttree_vp(train, 1:n, maxPointsPerNode, maxLevel, sigma, 0, 0);
     for i = 1:m
         % perform tree search
-        p = travtree2n(root, q(:,i), sigma);
+        p = travtree2n(root, test(:,i), sigma);
         
         % search for neighbors
         search_inds = unique([p, test_nn(i,:)]);
-        new_nn = kknn(r, search_inds, q(:,i), sigma, K, numel(search_inds));
+        new_nn = kknn(train, search_inds, test(:,i), sigma, K, ...
+            numel(search_inds));
         
         % update disteval
         disteval = disteval + numel(search_inds);
@@ -88,8 +83,8 @@ while(k <= ntree && acc ~= 1.0)
     % calculate distance ratio
     distr = zeros(m, 1);
     for i = 1:m
-        dist_actual = distk(r(:,actual_nn(i,:)),q(:,i),sigma);
-        dist_app = distk(r(:,points(i,:)),q(:,i),sigma);
+        dist_actual = distk(train(:,actual_nn(i,:)),test(:,i),sigma);
+        dist_app = distk(train(:,points(i,:)),test(:,i),sigma);
         distr(i) = mean(dist_app ./ dist_actual); 
     end
     
