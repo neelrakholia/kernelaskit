@@ -19,11 +19,11 @@ len = size(query, 2);
 % if there is 1 query point or many
 if(len == 1)
     % sort distance and report k NN
-    [m,ind] = sort(dist);
+    [~,ind] = sort(dist);
     points = indi(ind(1:k));
 else
     % sort distance and report k NN
-    [m,ind] = sort(dist);
+    [~,ind] = sort(dist);
     ind = ind';
     % datasum = sum(data, 1);
     points = indi(ind(:,1:k));
