@@ -180,24 +180,13 @@ classdef bsttree_vp < handle
             end % end if
         end % end function
         
-        function find_leaf(point_ind, node)
-           
-            if (isempty(node.left))
-                
-                fprintf('Point in leaf with radius %g\n', node.rad);
-                
-            elseif (~isempty(intersect(point_ind, node.left.ind)))
-            
-                fprintf('Point in left_child with radius %g at level %d\n', node.rad, node.ndepth);
-                find_leaf(point_ind, node.left);
-                
-            else
-                fprintf('Point in right_child with radius %g at level %d\n', node.rad, node.ndepth);
-                
-                find_leaf(point_ind, node.right);
-                
-            end
-            
+        % travereses to the node closest to the query point
+        % root:    the tree containing data
+        % query:   query point whose NN are to be searched
+        % sigma:   bandwidth for rbf kernel
+        function q = travtree2n_h(root, query, sigma)
+           query = num2cell(query, 1);
+           q = cellfun(@(x) travtree2n(root, x, sigma), query, 'UniformOutput', 0);
         end
         
     end % end methods
