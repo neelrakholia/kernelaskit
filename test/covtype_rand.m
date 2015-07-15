@@ -17,8 +17,8 @@ test = binread_array(filename, m*dim);
 test = reshape(test, dim, m);
 
 % sample data
-n = 2^18;
-m = 1600;
+n = 2^15;
+m = 200;
 train = datasample(train, n, 2, 'Replace', false);
 test = datasample(test, m, 2, 'Replace', false);
 
@@ -36,12 +36,11 @@ maxLevel        =  12;
 % brute force search
 tic
 piece = 10;
-actual_nn = kknn(train,1:n,test(:,1:m/10),sigma,K,n);
+actual_nn = kknn(train,1:n,test(:,1:m/piece),sigma,K,n);
 for i = 2:piece
     actual_nn = vertcat(actual_nn, kknn(train,1:n,...
-        test(:,(i - 1)*(m/10) + 1:i*m/10),sigma,K,n));
+        test(:,(i - 1)*(m/piece) + 1:i*m/piece),sigma,K,n));
 end
-
 toc
 
 % construct tree and search for nearest neighbors
@@ -51,14 +50,16 @@ points = zeros(m,K);
 test_nn = ones(m, K);
 
 % search for neighbors for each query point
-tic
 disteval = 0;
 treeeval = 0;
 k = 0;
 acc = 0;
 while(k <= ntree && acc < 0.9)
+    tic
     % construct tree
     root = bsttree_vp(train, 1:n, maxPointsPerNode, maxLevel, sigma, 0, 0);
+    toc
+    tic
     for i = 1:m
         % perform tree search
         p = travtree2n(root, test(:,i), sigma);
@@ -77,7 +78,8 @@ while(k <= ntree && acc < 0.9)
         % store points
         points(i,:) = test_nn(i,:);
     end
-    
+    toc
+    tic
     treeeval = treeeval + root.dise;
     
     suml = 0;
@@ -120,5 +122,5 @@ while(k <= ntree && acc < 0.9)
     fprintf('Average ratio of distance: %f\n',mean(distr));
     
     k = k + 1;
+    toc
 end
-toc
