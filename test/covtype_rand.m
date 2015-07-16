@@ -4,21 +4,23 @@ addpath('src/')
 addpath('..')
 
 % read train
-filename = 'covtype.libsvm.trn.X.bin';
-n = 499999;
-dim = 54;
+%filename = 'covtype.libsvm.trn.X.bin';
+filename = 'susy.icml.trn.X.bin';
+n = 4499999;
+dim = 18;
 train = binread_array(filename, n*dim);
 train = reshape(train, dim, n);
 
 % read test
-filename = 'covtype.libsvm.tst.X.bin';
-m = 80012;
+%filename = 'covtype.libsvm.tst.X.bin';
+filename = 'susy.icml.tst.X.bin';
+m = 499999;
 test = binread_array(filename, m*dim);
 test = reshape(test, dim, m);
 
 % sample data
-n = 2^15;
-m = 200;
+n = 2^22;
+m = 20;
 train = datasample(train, n, 2, 'Replace', false);
 test = datasample(test, m, 2, 'Replace', false);
 
@@ -27,10 +29,10 @@ K = 10;
 ntree = 20;
 
 % example kernel
-sigma = 0.22;
+sigma = 0.15;
 
 % tree options
-maxPointsPerNode = 2^10;
+maxPointsPerNode = 2^13;
 maxLevel        =  12;
 
 % brute force search
