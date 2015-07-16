@@ -1,0 +1,82 @@
+\documentclass[11pt]{article}
+
+\usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+
+\topmargin 0.0cm
+\oddsidemargin 0.2cm
+\textwidth 16cm 
+\textheight 21cm
+\footskip 1.0cm
+
+\newenvironment{sciabstract}{%
+\begin{quote} \bf}
+{\end{quote}}
+
+\renewcommand\refname{References and Notes}
+
+% The following lines set up an environment for the last note in the
+% reference list, which commonly includes acknowledgments of funding,
+% help, etc.  It's intended for users of BibTeX or the {thebibliography}
+% environment.  Users who are hand-coding their references at the end
+% using a list environment such as {enumerate} can simply add another
+% item at the end, and it will be numbered automatically.
+
+\newcounter{lastnote}
+\newenvironment{scilastnote}{%
+\setcounter{lastnote}{\value{enumiv}}%
+\addtocounter{lastnote}{+1}%
+\begin{list}%
+{\arabic{lastnote}.}
+{\setlength{\leftmargin}{.22in}}
+{\setlength{\labelsep}{.5em}}}
+{\end{list}}
+
+\title{Nearest Neighbor Search in General Metric Spaces} 
+
+
+% Place the author information here.  Please hand-code the contact
+% information and notecalls; do *not* use \footnote commands.  Let the
+% author contact information appear immediately below the author names
+% as shown.  We would also prefer that you don't change the type-size
+% settings shown here.
+
+\author
+{Neel Rakholia,$^{1\ast}$ William March,$^{2}$ George Biros$^{2}$\\
+\\
+\normalsize{$^{1}$Department of Applied Mathematics and Applied Physics,}\\
+\normalsize{Columbia University,}
+\normalsize{New York, NY 10027, USA}\\
+\normalsize{$^{2}$Institute for Computational Engineering and Science,}\\
+\normalsize{University of Texas at Austin,}
+\normalsize{Austin, TX 78705, USA}\\
+\\
+\normalsize{$^\ast$To whom correspondence should be addressed; E-mail:  nvr2105@columbia.edu}
+}
+
+% Include the date command, but leave its argument blank.
+\date{}
+
+\begin{document}
+
+% Double-space the manuscript.
+%\baselineskip24pt
+% Make the title.
+\maketitle 
+
+\paragraph{Abstract.} Significant work has been done on addressing the problem of nearest neighbor search in Euclidean Space. Notable is the wealth of literature on search techniques involving the use of trees. Kd-trees and Ball trees are among the more commonly used data structures. Surprisingly little work however has been done on using trees to find nearest neighbors in general metric spaces.
+\\
+\indent In this paper we undertake a study of vantage point trees (VP-trees), and analyze their effectiveness in finding nearest neighbors for kernel based distance metrics. We also propose two methods for searching these trees: an exact backtrack search algorithm, and an approximate random tree search algorithm. Previous work on VP-trees has focused on a priority queue based search, which is not very effective for even moderately high dimensional data. Our approach is unique in this regard.
+\\
+\indent For an RBF-kernel based distance metric, 500,000 training points and 54 features, nearest neighbor search on 20,000 query points using the random trees search method yielded 90 percent accuracy with only about 1 percent of total distance evaluations: an improvement of about 2 orders of magnitude. 
+
+\paragraph{Keywords.} Nearest Neighbor Algorithms, Tree Codes, Data Analysis, VP-Trees, Machine Learning
+
+\section{Introduction} 
+
+\end{document}
