@@ -169,7 +169,7 @@ classdef bsttree_vp < handle
                 nn(global_id,:) = q;
                 
                 % update computations
-                dev = numel(search_id)*numel(global_id);
+                dev = dev + numel(search_id)*numel(global_id);
                 return;
             end
             
@@ -189,12 +189,12 @@ classdef bsttree_vp < handle
             if(numel(indl) > 0)
                 % store data according to distance from query point
                 [nn,dev] = travtree2n(root.left, query(:,indl), sigma, ...
-                    global_id(indl), data, k, nn, prev);
+                    global_id(indl), data, k, nn, prev, dev);
             end
             if(numel(indr) > 0)
                 % store data according to distance from query point
                 [nn,dev] = travtree2n(root.right, query(:, indr), sigma, ...
-                    global_id(indr), data, k, nn, prev);
+                    global_id(indr), data, k, nn, prev, dev);
             end % end if
         end % end function
         

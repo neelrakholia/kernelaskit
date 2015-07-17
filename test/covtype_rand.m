@@ -20,7 +20,7 @@ test = reshape(test, dim, m);
 
 % sample data
 n = 4400000;
-m = 400;
+m = 40;
 train = datasample(train, n, 2, 'Replace', false);
 test = datasample(test, m, 2, 'Replace', false);
 
@@ -70,7 +70,7 @@ while(k <= ntree && acc < 0.9)
     % search tree
     tic
     [new_nn,deval] = travtree2n(root, test, sigma, ...
-        1:m, train, K, points, test_nn);
+        1:m, train, K, points, test_nn, 0);
     test_nn = new_nn;
     points = test_nn;
     disteval = disteval + deval;
