@@ -35,7 +35,7 @@ maxLevel        =  12;
 
 % brute force search
 tic
-piece = 10;
+piece = 100;
 actual_nn = zeros(m,K);
 actual_nn(1:m/piece, :) = kknn(train,1:n,test(:,1:m/piece),sigma,K,n);
 for i = 2:piece
