@@ -8,35 +8,12 @@ function [datal, datar, indl, indr, rad, cent, diseval] = classify_vp(data, ...
 % the number of random points to select
 rand = 1; 
 
+% update distance evaluations
 diseval = diseval + rand*nsize;
-
-% select a random sample of data points to estimate variance
-%randp = nsize;
-%randp = ceil(0.01*nsize);
 
 % select random points
 perm = randperm(nsize);
 index = perm(1:rand);
-% 
-% rpoints = perm(1:randp);
-% rpoints = data(:,rpoints);
-% 
-% varm = 0;
-% bestp = 0;
-
-% % select best point
-% for i = 1:rand
-%     cent = data(:, index(i));
-%     dist = distk(rpoints, cent, sigma);
-%     
-%     % calculate variance
-%     varl = var(dist);
-%     
-%     if(varl > varm)
-%         bestp = cent;
-%         varm = varl;
-%     end
-% end
 
 % linear search through all the points
 cent = data(:, index(rand));
