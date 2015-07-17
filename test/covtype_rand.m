@@ -19,8 +19,8 @@ test = binread_array(filename, m*dim);
 test = reshape(test, dim, m);
 
 % sample data
-n = 2^22;
-m = 20;
+n = 4400000;
+m = 400;
 train = datasample(train, n, 2, 'Replace', false);
 test = datasample(test, m, 2, 'Replace', false);
 
@@ -32,7 +32,7 @@ ntree = 20;
 sigma = 0.15;
 
 % tree options
-maxPointsPerNode = 2^13;
+maxPointsPerNode = 2^7;
 maxLevel        =  12;
 
 % brute force search
@@ -51,36 +51,30 @@ points = zeros(m,K);
 % storing previous iteration
 test_nn = ones(m, K);
 
+% array for storing time
+elapsed_time_array = [];
+
 % search for neighbors for each query point
-disteval = 0;
 treeeval = 0;
 k = 0;
 acc = 0;
+
+% iterate through all the the trees
 while(k <= ntree && acc < 0.9)
+    % construct tee
     tic
-    % construct tree
     root = bsttree_vp(train, 1:n, maxPointsPerNode, maxLevel, sigma, 0, 0);
-    toc
+    elapsed_time_array(end + 1) = toc;
+    
+    % search tree
     tic
-    for i = 1:m
-        % perform tree search
-        p = travtree2n(root, test(:,i), sigma);
-        
-        % search for neighbors
-        search_inds = unique([p, test_nn(i,:)]);
-        new_nn = kknn(train, search_inds, test(:,i), sigma, K, ...
-            numel(search_inds));
-        
-        % update disteval
-        disteval = disteval + numel(search_inds);
-        
-        % update array to store current iteration
-        test_nn(i,:) = new_nn;
-        
-        % store points
-        points(i,:) = test_nn(i,:);
-    end
-    toc
+    [new_nn,disteval] = travtree2n(root, test, sigma, ...
+        1:m, train, K, points, test_nn);
+    test_nn = new_nn;
+    points = test_nn;
+    elapsed_time_array(end + 1) = toc;
+    
+    % evaluate performace
     tic
     treeeval = treeeval + root.dise;
     
@@ -104,7 +98,6 @@ while(k <= ntree && acc < 0.9)
         distr(i) = mean(dist_app ./ dist_actual); 
     end
     
-    
     % print accuracy
     acc = suml/(m*K);
     fprintf('Accuracy: %f\n', suml/(m*K));
@@ -124,5 +117,14 @@ while(k <= ntree && acc < 0.9)
     fprintf('Average ratio of distance: %f\n',mean(distr));
     
     k = k + 1;
-    toc
+    elapsed_time_array(end + 1) = toc;
 end
+
+fprintf('Time spent constructing trees: %g\n',...
+    sum(elapsed_time_array(1:3:end)));
+fprintf('Time spent searching trees: %g\n',...
+    sum(elapsed_time_array(2:3:end)));
+fprintf('Total time spent running algo: %g\n',...
+    sum(elapsed_time_array(1:3:end)) + sum(elapsed_time_array(2:3:end)));
+fprintf('Total time spent running: %g\n',...
+    sum(elapsed_time_array))
