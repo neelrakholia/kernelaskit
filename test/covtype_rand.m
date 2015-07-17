@@ -17,8 +17,8 @@ test = binread_array(filename, m*dim);
 test = reshape(test, dim, m);
 
 % sample data
-n = 440000;
-m = 400;
+n = 499999;
+m = 80000;
 train = datasample(train, n, 2, 'Replace', false);
 test = datasample(test, m, 2, 'Replace', false);
 
@@ -30,16 +30,17 @@ ntree = 20;
 sigma = 0.22;
 
 % tree options
-maxPointsPerNode = 2^10;
+maxPointsPerNode = 2^11;
 maxLevel        =  12;
 
 % brute force search
 tic
 piece = 10;
-actual_nn = kknn(train,1:n,test(:,1:m/piece),sigma,K,n);
+actual_nn = zeros(m,K);
+actual_nn(1:m/piece, :) = kknn(train,1:n,test(:,1:m/piece),sigma,K,n);
 for i = 2:piece
-    actual_nn = vertcat(actual_nn, kknn(train,1:n,...
-        test(:,(i - 1)*(m/piece) + 1:i*m/piece),sigma,K,n));
+    actual_nn((i - 1)*(m/piece) + 1:i*m/piece,:) = ...
+        kknn(train,1:n,test(:,(i - 1)*(m/piece) + 1:i*m/piece),sigma,K,n);
 end
 toc
 
