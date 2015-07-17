@@ -32,7 +32,7 @@ ntree = 20;
 sigma = 0.15;
 
 % tree options
-maxPointsPerNode = 2^7;
+maxPointsPerNode = 2^13;
 maxLevel        =  12;
 
 % brute force search
@@ -55,6 +55,7 @@ test_nn = ones(m, K);
 elapsed_time_array = [];
 
 % search for neighbors for each query point
+disteval = 0;
 treeeval = 0;
 k = 0;
 acc = 0;
@@ -68,10 +69,11 @@ while(k <= ntree && acc < 0.9)
     
     % search tree
     tic
-    [new_nn,disteval] = travtree2n(root, test, sigma, ...
+    [new_nn,deval] = travtree2n(root, test, sigma, ...
         1:m, train, K, points, test_nn);
     test_nn = new_nn;
     points = test_nn;
+    disteval = disteval + deval;
     elapsed_time_array(end + 1) = toc;
     
     % evaluate performace
