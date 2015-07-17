@@ -23,8 +23,8 @@ train = datasample(train, n, 2, 'Replace', false);
 test = datasample(test, m, 2, 'Replace', false);
 
 % number of nearest neighbors, and number of trees to generate
-K = 10;
-ntree = 20;
+K = 1000;
+ntree = 100;
 
 % example kernel
 sigma = 0.22;
@@ -60,7 +60,7 @@ k = 0;
 acc = 0;
 
 % iterate through all the the trees
-while(k <= ntree && acc < 0.9)
+while(k <= ntree && acc < 0.98)
     % construct tee
     tic
     root = bsttree_vp(train, 1:n, maxPointsPerNode, maxLevel, sigma, 0, 0);
