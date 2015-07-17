@@ -155,11 +155,21 @@ classdef bsttree_vp < handle
         % root:    the tree containing data
         % query:   query point whose NN are to be searched
         % sigma:   bandwidth for rbf kernel
-        function q = travtree2n(root, query, sigma)
+        function [nn,dev] = travtree2n(root, query, sigma, global_id, data,...
+                k, nn, prev, dev)
             % base case
             % if the root is a leaf
             if(isempty(root.left))
-                q = root.ind;
+                % search for nn
+                prev_id = reshape(prev(global_id,:),1,k*numel(global_id));
+                search_id = unique([root.ind, prev_id]);
+                q = kknn(data, search_id, query, sigma, k, numel(search_id));
+                
+                % store nn
+                nn(global_id,:) = q;
+                
+                % update computations
+                dev = numel(search_id)*numel(global_id);
                 return;
             end
             
@@ -169,14 +179,22 @@ classdef bsttree_vp < handle
             
             % calculate distance between query point and center
             dist = distk(query, center, sigma);
+            larr = dist < radius;
+            
+            % get the right and left queries
+            indl = find(larr);
+            indr = find(~larr);
             
             % recursive call to whichever center is closer
-            if(dist < radius)
+            if(numel(indl) > 0)
                 % store data according to distance from query point
-                q = travtree2n(root.left, query, sigma);
-            else
+                [nn,dev] = travtree2n(root.left, query(:,indl), sigma, ...
+                    global_id(indl), data, k, nn, prev);
+            end
+            if(numel(indr) > 0)
                 % store data according to distance from query point
-                q = travtree2n(root.right, query, sigma);
+                [nn,dev] = travtree2n(root.right, query(:, indr), sigma, ...
+                    global_id(indr), data, k, nn, prev);
             end % end if
         end % end function
         
