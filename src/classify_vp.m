@@ -11,8 +11,8 @@ rand = 1; %ceil(0.005*nsize);
 diseval = diseval + rand*nsize;
 
 % select a random sample of data points to estimate variance
-randp = nsize;
-% randp = ceil(0.01*nsize);
+%randp = nsize;
+randp = ceil(0.01*nsize);
 
 % select random points
 perm = randperm(nsize);
