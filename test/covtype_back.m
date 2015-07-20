@@ -17,8 +17,8 @@ test = binread_array(filename, m*dim);
 test = reshape(test, dim, m);
 
 % sample data
-n = 2^14;
-m = 400;
+n = 2^15;
+m = 800;
 train = datasample(train, n, 2, 'Replace', false);
 test = datasample(test, m, 2, 'Replace', false);
 
@@ -29,7 +29,7 @@ K = 10;
 sigma = 0.22;
 
 % tree options
-maxPointsPerNode = 2^9;
+maxPointsPerNode = 2^8;
 maxLevel        =  12;
 
 % construct tree and search for nearest neighbors
