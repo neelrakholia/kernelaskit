@@ -3,10 +3,12 @@
 \usepackage{lipsum}
 \usepackage{amsmath}
 \usepackage{amsthm}
+\usepackage{amssymb}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{graphicx}
 \graphicspath{ {images/} }
+\usepackage{cite}
 
 \topmargin 0.0cm
 \oddsidemargin 0.2cm
@@ -78,5 +80,31 @@
 \paragraph{Keywords.} Nearest Neighbor Algorithms, Tree Codes, Metric Spaces, Data Analysis, VP-Trees, Machine Learning
 
 \section{Introduction} 
+\paragraph{} The nearest neighbor problem refers to finding the set of points $P_c$ in a database of points $D$ that are closest to a query point $q$. The notion of close and correspondingly distance can be fairly arbitrary as long as it follows the following properties. For a space to be metric, these properties must hold true. ~\cite{Nayar08}
+\begin{enumerate}
+\item Reflectivity: $d(a,a) = 0$
+\item Symmetry: $d(a,b) = d(b,a)$
+\item Non-Negativity: $d(a,b) > 0$, $a \neq b$
+\item Triangle Inequality: $d(a, b) \leq d(a, c) + d(b, c)$
+\end{enumerate}
+
+\paragraph{} One of the more widely used distance metrics are derived from similarity measures such a kernels. These are of immense practical importance in fields such Computer Vision and Natural Language Processing where the concept of similarity between abstract objects is of importance. A kernel $K:$ $\mathbb{R}^d \times \mathbb{R}^d$ is a similarity function with the property that for any $x$ and $y$, the distance between $x$ and $y$ increases, $K(x, y)$ decreases. The construction of the kernel distance subsequently involves a transformation from similarities to distances. It can be represented in the following general form. Given two “objects” $A$ and $B$, and a measure of similarity between them given by $K(A,B)$, then the induced distance between $A$ and $B$ can be defined as the difference between the self-similarities $K(A,A) + K(B,B)$ and the cross-similarity $K(A,B)$. Additionally this distance could be normalized by taking the square root. ~\cite{Phillips10}
+
+\begin{equation}
+d(A,B) = \sqrt{K(A,A) + K(B,B) - 2K(A,B)}
+\end{equation}
+
+\paragraph{} VP-trees require the use of a bounded distance metric: a metric that yields distance between $[0,1]$. Any unbounded kernel distance metric can be scaled to be a bounded metric by the following simple transformation: ~\cite{Yianilos93}
+
+\begin{equation}
+d'(A,B) = \frac{d(A,B)}{1 + d(A,B)}
+\end{equation}
+
+\paragraph*{Significance} 
+
+Vantage point trees (VP-trees) use concentric hyperspheres to partition points into a metric tree. ~\cite{Yianilos93} 
+
+\bibliography{reportbib}{}
+\bibliographystyle{plain}
 
 \end{document}
