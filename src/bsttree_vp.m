@@ -164,7 +164,7 @@ classdef bsttree_vp < handle
                 prev_id = reshape(prev(global_id,:),1,k*numel(global_id));
                 search_id = unique([root.ind, prev_id]);
                 q = kknn(data, search_id, query, sigma, k, numel(search_id));
-                
+
                 % store nn
                 nn(global_id,:) = q;
                 
