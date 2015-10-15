@@ -1,0 +1,131 @@
+Parameters:
+Number of points = 4000
+Number of queries = 100
+Order of wsk = 2
+Lamda = 0.5
+Maximum points per node = 100
+Tolerance = 0.80
+Number of documents of difference categories = 21
+
+
+Iteration 0. Rank acc: 0.02, Dist acc: 0.362627, Evals in this iter: 0.0186, Total evals: 0.0186
+
+Iteration 1. Rank acc: 0.075, Dist acc: 0.466087, Evals in this iter: 0.0185675, Total evals: 0.0371675
+
+Iteration 2. Rank acc: 0.185, Dist acc: 0.545459, Evals in this iter: 0.0185575, Total evals: 0.055725
+
+Iteration 3. Rank acc: 0.225, Dist acc: 0.577867, Evals in this iter: 0.018535, Total evals: 0.07426
+
+Iteration 4. Rank acc: 0.265, Dist acc: 0.622112, Evals in this iter: 0.01856, Total evals: 0.09282
+
+Iteration 5. Rank acc: 0.295, Dist acc: 0.638891, Evals in this iter: 0.0185525, Total evals: 0.111372
+
+Iteration 6. Rank acc: 0.34, Dist acc: 0.679445, Evals in this iter: 0.0185125, Total evals: 0.129885
+
+Iteration 7. Rank acc: 0.375, Dist acc: 0.686626, Evals in this iter: 0.0185625, Total evals: 0.148448
+
+Iteration 8. Rank acc: 0.385, Dist acc: 0.689109, Evals in this iter: 0.01852, Total evals: 0.166967
+
+Iteration 9. Rank acc: 0.405, Dist acc: 0.725481, Evals in this iter: 0.01851, Total evals: 0.185477
+
+Iteration 10. Rank acc: 0.42, Dist acc: 0.754562, Evals in this iter: 0.01855, Total evals: 0.204028
+
+Iteration 11. Rank acc: 0.465, Dist acc: 0.778127, Evals in this iter: 0.018555, Total evals: 0.222582
+
+Iteration 12. Rank acc: 0.495, Dist acc: 0.788084, Evals in this iter: 0.0185375, Total evals: 0.24112
+
+Iteration 13. Rank acc: 0.525, Dist acc: 0.794657, Evals in this iter: 0.0185325, Total evals: 0.259653
+
+Iteration 14. Rank acc: 0.535, Dist acc: 0.800105, Evals in this iter: 0.01853, Total evals: 0.278182
+
+Iteration 0. Rank acc: 0.045, Dist acc: 0.16521, Evals in this iter: 0.0185775, Total evals: 0.0185775
+
+Iteration 1. Rank acc: 0.105, Dist acc: 0.321797, Evals in this iter: 0.018635, Total evals: 0.0372125
+
+Iteration 2. Rank acc: 0.16, Dist acc: 0.381534, Evals in this iter: 0.01855, Total evals: 0.0557625
+
+Iteration 3. Rank acc: 0.24, Dist acc: 0.546693, Evals in this iter: 0.0185475, Total evals: 0.07431
+
+Iteration 4. Rank acc: 0.26, Dist acc: 0.562931, Evals in this iter: 0.018545, Total evals: 0.092855
+
+Iteration 5. Rank acc: 0.27, Dist acc: 0.573668, Evals in this iter: 0.0185975, Total evals: 0.111452
+
+Iteration 6. Rank acc: 0.35, Dist acc: 0.61447, Evals in this iter: 0.01853, Total evals: 0.129983
+
+Iteration 7. Rank acc: 0.375, Dist acc: 0.621038, Evals in this iter: 0.01856, Total evals: 0.148542
+
+Iteration 8. Rank acc: 0.385, Dist acc: 0.634675, Evals in this iter: 0.01854, Total evals: 0.167082
+
+Iteration 9. Rank acc: 0.41, Dist acc: 0.639451, Evals in this iter: 0.0185775, Total evals: 0.18566
+
+Iteration 10. Rank acc: 0.43, Dist acc: 0.654906, Evals in this iter: 0.0185475, Total evals: 0.204207
+
+Iteration 11. Rank acc: 0.43, Dist acc: 0.656293, Evals in this iter: 0.0185725, Total evals: 0.22278
+
+Iteration 12. Rank acc: 0.455, Dist acc: 0.660671, Evals in this iter: 0.01857, Total evals: 0.24135
+
+Iteration 13. Rank acc: 0.47, Dist acc: 0.664182, Evals in this iter: 0.018575, Total evals: 0.259925
+
+Iteration 14. Rank acc: 0.49, Dist acc: 0.668805, Evals in this iter: 0.018545, Total evals: 0.27847
+
+Iteration 15. Rank acc: 0.505, Dist acc: 0.687647, Evals in this iter: 0.0185625, Total evals: 0.297032
+
+Iteration 16. Rank acc: 0.545, Dist acc: 0.839345, Evals in this iter: 0.018525, Total evals: 0.315557
+
+Iteration 0. Rank acc: 0.06, Dist acc: 0.226853, Evals in this iter: 0.0186075, Total evals: 0.0186075
+
+Iteration 1. Rank acc: 0.07, Dist acc: 0.27039, Evals in this iter: 0.01859, Total evals: 0.0371975
+
+Iteration 2. Rank acc: 0.2, Dist acc: 0.550265, Evals in this iter: 0.0185525, Total evals: 0.05575
+
+Iteration 3. Rank acc: 0.225, Dist acc: 0.568581, Evals in this iter: 0.0185725, Total evals: 0.0743225
+
+Iteration 4. Rank acc: 0.25, Dist acc: 0.596718, Evals in this iter: 0.01856, Total evals: 0.0928825
+
+Iteration 5. Rank acc: 0.275, Dist acc: 0.606895, Evals in this iter: 0.0185825, Total evals: 0.111465
+
+Iteration 6. Rank acc: 0.3, Dist acc: 0.620943, Evals in this iter: 0.0185675, Total evals: 0.130032
+
+Iteration 7. Rank acc: 0.32, Dist acc: 0.635532, Evals in this iter: 0.0185225, Total evals: 0.148555
+
+Iteration 8. Rank acc: 0.355, Dist acc: 0.658647, Evals in this iter: 0.0185475, Total evals: 0.167102
+
+Iteration 9. Rank acc: 0.38, Dist acc: 0.669396, Evals in this iter: 0.01853, Total evals: 0.185633
+
+Iteration 10. Rank acc: 0.41, Dist acc: 0.730132, Evals in this iter: 0.0185675, Total evals: 0.2042
+
+Iteration 11. Rank acc: 0.43, Dist acc: 0.739903, Evals in this iter: 0.0185475, Total evals: 0.222747
+
+Iteration 12. Rank acc: 0.5, Dist acc: 0.769673, Evals in this iter: 0.01861, Total evals: 0.241358
+
+Iteration 13. Rank acc: 0.53, Dist acc: 0.774628, Evals in this iter: 0.018545, Total evals: 0.259902
+
+Iteration 14. Rank acc: 0.54, Dist acc: 0.777936, Evals in this iter: 0.0185625, Total evals: 0.278465
+
+Iteration 15. Rank acc: 0.555, Dist acc: 0.781883, Evals in this iter: 0.01856, Total evals: 0.297025
+
+Iteration 16. Rank acc: 0.57, Dist acc: 0.784373, Evals in this iter: 0.0185275, Total evals: 0.315553
+
+Iteration 17. Rank acc: 0.59, Dist acc: 0.786276, Evals in this iter: 0.0185375, Total evals: 0.33409
+
+Iteration 18. Rank acc: 0.595, Dist acc: 0.786585, Evals in this iter: 0.018535, Total evals: 0.352625
+
+Iteration 19. Rank acc: 0.6, Dist acc: 0.786903, Evals in this iter: 0.01859, Total evals: 0.371215
+
+Iteration 20. Rank acc: 0.615, Dist acc: 0.794471, Evals in this iter: 0.0185425, Total evals: 0.389757
+
+Iteration 21. Rank acc: 0.63, Dist acc: 0.797952, Evals in this iter: 0.0185725, Total evals: 0.40833
+
+Iteration 22. Rank acc: 0.665, Dist acc: 0.808429, Evals in this iter: 0.01856, Total evals: 0.42689
+
+
+
+===================================
+
+Results: (min, avg, max) over 3 runs
+
+Rank accuracy: 0.535, 0.581667, 0.665
+Distance accuracy: 0.800105, 0.815959, 0.839345
+Num iterations: 15, 18.3333, 23
+Search Evaluations: 0.278182, 0.34021, 0.42689
+Tree Evaluations: 368000, 448000, 560000
